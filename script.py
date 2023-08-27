@@ -2,12 +2,11 @@ import sys
 import os
 import typing
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QApplication, QVBoxLayout
-from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QApplication, QVBoxLayout, QProgressBar, QPushButton
+from PyQt5.QtCore import QSize, Qt, QBasicTimer
 from PyQt5.QtGui import QPixmap
 
-# o get_img para a spash art do drag&drop
+
 class ImageLabel(QLabel):
     def __init__(self):
         super().__init__()
@@ -16,14 +15,15 @@ class ImageLabel(QLabel):
         self.setText('\n\n Drop image here \n\n')
         self.setStyleSheet('''
                            Qlabel{
-                                border: 4px dashed #aaa
+                                border: 4px dashed #aaa;
+                                background-color: white;
                            }
                           ''')
 
     def setPixmap(self, image):
         super().setPixmap(image)
 
-#integração do drag & drop
+
 class DragDrop(QWidget):
     def __init__(self):
         super().__init__()
@@ -62,7 +62,7 @@ class DragDrop(QWidget):
         def set_image(self, file_path):
             self.photoViewer.setPixmap(QPixmap(file_path))
 
-# Janela principal
+
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
@@ -71,36 +71,113 @@ class MainWindow(QMainWindow):
         self.setMaximumSize(QSize(400, 200))
         self.setWindowTitle("EskoCrypt IMACX")
 
-        pybutton = QPushButton('Open Folder', self)
-        pybutton.clicked.connect(self.clickMethod)
-        pybutton.resize(100, 32)
-        pybutton.move(5, 5)
-        pybutton.setStyleSheet("background-color : none")
+        # barra de progresso inicialização
+        self.initUI()
+        self.OpenFolder()
 
-        secPyButton = QPushButton("Open File", self)
-        secPyButton.clicked.connect(self.clickMethod)
-        secPyButton.resize(100, 32)
-        secPyButton.move(110, 5)
-        secPyButton.setStyleSheet("background-color : none")
+        OpenFileBtn = QPushButton("Open File", self)
+        OpenFileBtn.clicked.connect(self.clickMethodFile)
+        OpenFileBtn.resize(100, 32)
+        OpenFileBtn.move(110, 5)
+        OpenFileBtn.setStyleSheet("background-color : none")
 
-        # thirdPyButton = DragDrop()
-        # thirdPyButton.resize(180, 180)
-        # thirdPyButton.move(215, 5)
+        dragDropBtn = QLabel("Drag & Drop", self)
+        dragDropBtn.resize(180, 180)
+        dragDropBtn.move(215, 5)
+        dragDropBtn.setStyleSheet("background-color : white")
+        dragDropBtn.setAlignment(Qt.AlignCenter)
+        dragDropBtn.setText('\n\n Drop image here \n\n')
+        dragDropBtn.setStyleSheet(
+            "QLabel { background-color : grey; color : white; border-radius: 10px;}")
 
-        thirdPyButton = QPushButton("Drag & Drop", self)
-        thirdPyButton.clicked.connect(self.clickMethod)
-        thirdPyButton.resize(180, 180)
-        thirdPyButton.move(215, 5)
-        thirdPyButton.setStyleSheet("background-color : white")
+        logVerb = QLabel("logs", self)
+        logVerb.resize(205, 70)
+        logVerb.move(5, 95)
+        logVerb.setStyleSheet("background-color : white")
+        logVerb.setAlignment(Qt.AlignLeft)
+        logVerb.setText('\n\n logs \n\n')
+        logVerb.setStyleSheet(
+            "QLabel { background-color : white; color : orange;}")
 
-        forthPyButton = QPushButton("Start", self)
-        forthPyButton.clicked.connect(self.clickMethod)
-        forthPyButton.resize(205, 32)
-        forthPyButton.move(5, 42)
-        forthPyButton.setStyleSheet("background-color : none")
+    def clickMethodFile(self):
 
-    def clickMethod(self):
-        print('Clicked Pyqt button.')
+        print('Clicked File button.')
+
+    def clickMethodFolder(self):
+        print('Clicked Folder button.')
+
+
+# Barra de progresso funcs
+
+
+    def OpenFolder(self):
+        self.OpenFolderBtn = QPushButton('Open Folder', self)
+        self.OpenFolderBtn.clicked.connect(self.openDirectory)
+        self.setCentralWidget(self.button)
+        self.OpenFolderBtn.resize(100, 32)
+        self.OpenFolderBtn.move(5, 5)
+        self.OpenFolderBtn.setStyleSheet("background-color : none")
+
+    # def openDirectory(self):
+    #     print("Hi i am openDirectory Function . I will open Directory selected ")
+    #     self.openDirectoryDialog = ddir = QFileDialog.getExistingDirectory(
+    #         self, "Get Dir Path")
+    #     print(self.openDirectoryDialog)
+
+    # def keyPressEvent(self, e):
+    #     if e.key() == Qt.Key_F1:
+    #         os.system('xdg-open "%s"' % self.openDirectoryDialog)
+
+    # class OpenDir(QMainWindow):
+    # def __init__(self):
+    #     super(OpenDir, self).__init__()
+    #     # self.openDirectory()
+    #     self.button = QPushButton('Open', self)
+    #     self.button.clicked.connect(self.openDirectory)
+    #     self.setCentralWidget(self.button)
+
+    # def openDirectory(self):
+    #     print("Hi i am openDirectory Function . I will open Directory selected ")
+    #     self.openDirectoryDialog = ddir = QFileDialog.getExistingDirectory(
+    #         self, "Get Dir Path")
+    #     print(self.openDirectoryDialog)
+
+    # def keyPressEvent(self, e):
+    #     if e.key() == Qt.Key_F1:
+    #         os.system('xdg-open "%s"' % self.openDirectoryDialog)
+
+    def initUI(self):
+
+        self.pbar = QProgressBar(self)
+        self.pbar.setGeometry(5, 80, 240, 10)
+
+        self.btn = QPushButton('Start', self)
+        self.btn.move(5, 42)
+        self.btn.resize(205, 32)
+        self.btn.clicked.connect(self.doAction)
+
+        self.timer = QBasicTimer()
+        self.step = 0
+
+    def timerEvent(self, e):
+
+        if self.step >= 100:
+
+            self.timer.stop()
+            self.btn.setText('Finished')
+            return
+
+        self.step = self.step + 1
+        self.pbar.setValue(self.step)
+
+    def doAction(self):
+
+        if self.timer.isActive():
+            self.timer.stop()
+            self.btn.setText('Start')
+        else:
+            self.timer.start(100, self)
+            self.btn.setText('Stop')
 
 
 if __name__ == "__main__":
@@ -110,4 +187,4 @@ if __name__ == "__main__":
     mainWin = MainWindow()
     mainWin.show()
 
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
