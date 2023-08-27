@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QPixmap
 
-
+# o get_img para a spash art do drag&drop
 class ImageLabel(QLabel):
     def __init__(self):
         super().__init__()
@@ -23,7 +23,7 @@ class ImageLabel(QLabel):
     def setPixmap(self, image):
         super().setPixmap(image)
 
-
+#integração do drag & drop
 class DragDrop(QWidget):
     def __init__(self):
         super().__init__()
@@ -62,7 +62,7 @@ class DragDrop(QWidget):
         def set_image(self, file_path):
             self.photoViewer.setPixmap(QPixmap(file_path))
 
-
+# Janela principal
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
