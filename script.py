@@ -58,7 +58,6 @@ class MainWindow(QMainWindow):
 
         if check:
             print(file)
-
         print('Clicked Folder button.')
 
     def OpenFile(self):
@@ -81,13 +80,14 @@ class MainWindow(QMainWindow):
         if check:
             print(file)
 
+# drag & drop elements starts
     def DragDropBtn(self):
         self.setAcceptDrops(True)
         self.dragDropBtn = QLabel("Drag & Drop", self)
         self.dragDropBtn.resize(180, 180)
         self.dragDropBtn.move(215, 5)
         self.dragDropBtn.setStyleSheet("background-color : white")
-        # dragDropBtn.setAlignment(Qt.AlignCenter)
+        self.dragDropBtn.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.dragDropBtn.setText('\n\n Drop image here \n\n')
         self.dragDropBtn.setStyleSheet(
             "QLabel { background-color : grey; color : white; border-radius: 10px;}")
@@ -97,37 +97,37 @@ class MainWindow(QMainWindow):
 
         # self.setLayout(mainLayout)
 
-        def dragEnterEvent(self, event):
-            if event.mineData().hasImage:
-                event.accept()
-            else:
-                event.ignore()
+    def dragEnterEvent(self, event):
+        if event.mineData().hasImage:
+            event.accept()
+        else:
+            event.ignore()
 
-        def dragMoveEvent(self, event):
-            if event.mineData().hasImage:
-                event.accept()
-            else:
-                event.ignore()
+    def dragMoveEvent(self, event):
+        if event.mineData().hasImage:
+            event.accept()
+        else:
+            event.ignore()
 
-        def dropEvent(self, event):
-            if event.mineData().hasImage:
-                event.setDropAction(Qt.CopyAction)
-                file_path = event.mineData().urls()[0].toLocalFile()
-                self.set_image(file_path)
+    def dropEvent(self, event):
+        if event.mineData().hasImage:
+            event.setDropAction(Qt.CopyAction)
+            file_path = event.mineData().urls()[0].toLocalFile()
+            self.set_image(file_path)
 
-                event.accept()
-            else:
-                event.ignore()
+            event.accept()
+        else:
+            event.ignore()
 
-        def set_image(self, file_path):
-            self.photoViewer.setPixmap(QPixmap(file_path))
+    def set_image(self, file_path):
+        self.photoViewer.setPixmap(QPixmap(file_path))
 
     def LogArea(self):
         self.logVerb = QLabel("logs", self)
         self.logVerb.resize(205, 70)
         self.logVerb.move(5, 95)
         self.logVerb.setStyleSheet("background-color : white")
-        # logVerb.setAlignment(Qt.AlignLeft)
+        self.logVerb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.logVerb.setText('\n\n logs \n\n')
         self.logVerb.setStyleSheet(
             "QLabel { background-color : white; color : orange;}")
