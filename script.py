@@ -39,6 +39,7 @@ class MainWindow(QMainWindow):
         self.DragDropBtn()
         self.LogArea()
 
+# Open Folder button
     def OpenFolder(self):
         self.OpenFolderBtn = QPushButton('Open Folder', self)
         self.OpenFolderBtn.clicked.connect(self.clickMethodFolder)
@@ -60,6 +61,7 @@ class MainWindow(QMainWindow):
             print(file)
         print('Clicked Folder button.')
 
+# Open file button
     def OpenFile(self):
         self.OpenFileBtn = QPushButton("Open File", self)
         self.OpenFileBtn.clicked.connect(self.clickMethodFile)
@@ -90,7 +92,8 @@ class MainWindow(QMainWindow):
         self.dragDropBtn.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.dragDropBtn.setText('\n\n Drop image here \n\n')
         self.dragDropBtn.setStyleSheet(
-            "QLabel { background-color : grey; color : white; border-radius: 10px;}")
+            "QLabel { background-color : grey; color : white; border-radius: 10px;}"
+        )
 
         # self.photoViewer = ImageLabel()
         # mainLayout.addWidget(self.photoViewer)
@@ -122,6 +125,7 @@ class MainWindow(QMainWindow):
     def set_image(self, file_path):
         self.photoViewer.setPixmap(QPixmap(file_path))
 
+# Log Area
     def LogArea(self):
         self.logVerb = QLabel("logs", self)
         self.logVerb.resize(205, 70)
@@ -130,11 +134,12 @@ class MainWindow(QMainWindow):
         self.logVerb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.logVerb.setText('\n\n logs \n\n')
         self.logVerb.setStyleSheet(
-            "QLabel { background-color : white; color : orange;}")
+            "QLabel { background-color : grey; border-radius: 2px;}"
+        )
 
     def ProgressBarBtn(self):
         self.pbar = QProgressBar(self)
-        self.pbar.setGeometry(5, 80, 240, 10)
+        self.pbar.setGeometry(5, 80, 205, 10)
 
         self.btn = QPushButton('Start', self)
         self.btn.move(5, 42)
