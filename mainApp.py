@@ -1,7 +1,7 @@
 import sys
 import os
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QMainWindow
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
@@ -54,7 +54,8 @@ class AppDemo(QWidget):
         if event.mimeData().hasImage:
             event.setDropAction(Qt.CopyAction)
             file_path = event.mimeData().urls()[0].toLocalFile()
-            self.set_image(file_path)
+            # Set the image in the Qlabel
+            # self.set_image(file_path)
             self.resize(400, 400)
             print(file_path)
         else:
