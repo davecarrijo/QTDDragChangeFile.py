@@ -1,5 +1,6 @@
 import sys
 import os
+import PyPDF2
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout
 from PyQt5.QtCore import Qt
@@ -50,6 +51,8 @@ class AppDemo(QWidget):
         else:
             event.ignore()
 
+
+
     def dropEvent(self, event):
         if event.mimeData().hasImage:
             event.setDropAction(Qt.CopyAction)
@@ -58,12 +61,65 @@ class AppDemo(QWidget):
             # self.set_image(file_path)
             self.resize(400, 400)
             print(file_path)
+            path = file_path
+
+                # start Pypdf2
+            def PDFrotate(origFileName, newFileName, rotation):
+
+                # creating a pdf File object of original pdf
+                pdfFileObj = open(origFileName, 'rb')
+
+                # creating a pdf Reader object
+                pdfReader = PyPDF2.PdfReader(pdfFileObj)
+
+                # creating a pdf writer object for new pdf
+                pdfWriter = PyPDF2.PdfWriter()
+
+                # rotating each page
+                for page in range(len(pdfReader.pages)):
+
+                    # creating rotated page object
+                    pageObj = pdfReader.pages[page]
+                    pageObj.rotate(rotation)
+
+                    # adding rotated page object to pdf writer
+                    pdfWriter.add_page(pageObj)
+
+                    # new pdf file object
+                    newFile = open(newFileName, 'wb')
+
+                    # writing rotated pages to new file
+                    pdfWriter.write(newFile)
+
+                # closing the original pdf file object
+                pdfFileObj.close()
+
+                # closing the new pdf file object
+                newFile.close()
+
+
+            def main():
+
+                # original pdf file name
+                # origFileName = 'example.pdf'
+                origFileName = file_path
+
+                # new pdf file name
+                newFileName = f"{origFileName} Altered.pdf"
+                print(file_path)
+
+                # rotation angle
+                rotation = 180
+
+                # calling the PDFrotate function
+                PDFrotate(origFileName, newFileName, rotation)
+
+                main()
         else:
             event.ignore()
 
     def set_image(self, file_path):
         self.photoViewer.setPixmap(QPixmap(file_path))
-
 
 def app():
     app = QApplication(sys.argv)
