@@ -18,7 +18,6 @@ def PDFrotate(origFileName, newFileName, rotation):
         # creating rotated page object
         pageObj = pdfReader.pages[page]
         pageObj.rotate(rotation)
-        pageObj.rotate(rotation)
 
         # adding rotated page object to pdf writer
         pdfWriter.add_page(pageObj)
@@ -42,10 +41,10 @@ def main():
     origFileName = 'example.pdf'
 
     # new pdf file name
-    newFileName = 'rotated_example.pdf'
+    newFileName = f"{origFileName} Altered.pdf"
 
     # rotation angle
-    rotation = 270
+    rotation = 180
 
     # calling the PDFrotate function
     PDFrotate(origFileName, newFileName, rotation)
