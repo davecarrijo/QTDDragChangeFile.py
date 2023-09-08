@@ -1,27 +1,9 @@
 import sys
 import os
-import typing
-from PyQt6 import QtCore, QtGui, QtWidgets
+from pypdf import PdfFileReader, PdfWriter, PdfFileWriter
 from PyQt6.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QApplication, QVBoxLayout, QProgressBar, QPushButton, QFileDialog
 from PyQt6.QtCore import QSize, Qt, QBasicTimer
 from PyQt6.QtGui import QPixmap
-
-
-class ImageLabel(QLabel):
-    def __init__(self):
-        super().__init__()
-
-        # self.setAlignment(Qt.AlignCenter)
-        self.setText('\n\n Drop image here \n\n')
-        self.setStyleSheet('''
-                           Qlabel{
-                                border: 4px dashed #aaa;
-                                background-color: white;
-                           }
-                          ''')
-
-    def setPixmap(self, image):
-        super().setPixmap(image)
 
 
 class MainWindow(QMainWindow):
@@ -39,7 +21,15 @@ class MainWindow(QMainWindow):
         self.DragDropBtn()
         self.LogArea()
 
+# # begin the pypdf part to update the files
+#     def creat_pdf(filename):
+#         writer = PdfWriter()
+#         with open(filename, 'file') as file:
+#             writer.write(file)
+
+
 # Open Folder button
+
     def OpenFolder(self):
         self.OpenFolderBtn = QPushButton('Open Folder', self)
         self.OpenFolderBtn.clicked.connect(self.clickMethodFolder)
@@ -48,7 +38,7 @@ class MainWindow(QMainWindow):
         self.OpenFolderBtn.setStyleSheet("background-color : none;")
 
     def clickMethodFolder(self):
-        # https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QFileDialog.html#PySide2.QtWidgets.PySide2.QtWidgets.QFileDialog.getOpenFileName
+        # ? https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QFileDialog.html#PySide2.QtWidgets.PySide2.QtWidgets.QFileDialog.getOpenFileName
         file, check = QFileDialog.getOpenFileName(
             None,
             "QFileDialog.getOpenFileName()",
@@ -64,13 +54,13 @@ class MainWindow(QMainWindow):
 # Open file button
     def OpenFile(self):
         self.OpenFileBtn = QPushButton("Open File", self)
-        self.OpenFileBtn.clicked.connect(self.clickMethodFile)
+        self.OpenFileBtn.clicked.connect(self.clickFileBtn)
         self.OpenFileBtn.resize(100, 32)
         self.OpenFileBtn.move(110, 5)
         self.OpenFileBtn.setStyleSheet("background-color : none")
 
-    def clickMethodFile(self):
-        # https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QFileDialog.html#PySide2.QtWidgets.PySide2.QtWidgets.QFileDialog.getOpenFileName
+    def clickFileBtn(self):
+        # ? https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QFileDialog.html#PySide2.QtWidgets.PySide2.QtWidgets.QFileDialog.getOpenFileName
         file, check = QFileDialog.getOpenFileName(
             None,
             "QFileDialog.getOpenFileName()",
@@ -85,36 +75,40 @@ class MainWindow(QMainWindow):
 # drag & drop elements starts
     def DragDropBtn(self):
         self.setAcceptDrops(True)
+
         self.dragDropBtn = QLabel("Drag & Drop", self)
         self.dragDropBtn.resize(180, 180)
         self.dragDropBtn.move(215, 5)
         self.dragDropBtn.setStyleSheet("background-color : white")
         self.dragDropBtn.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.dragDropBtn.setText('\n\n Drop image here \n\n')
-        self.dragDropBtn.setStyleSheet(
-            "QLabel { background-color : grey; color : white; border-radius: 10px;}"
-        )
+        self.dragDropBtn.setStyleSheet('''
+            QLabel {
+            background-color : grey;
+            color : white;
+            border-radius: 10px;
+            border: 3px dashed #aaa
+            }
+            ''')
 
-        # self.photoViewer = ImageLabel()
-        # mainLayout.addWidget(self.photoViewer)
-
-        # self.setLayout(mainLayout)
+    def setPixmap(self, image):
+        super().setPixmap(image)
 
     def dragEnterEvent(self, event):
-        if event.mineData().hasImage:
+        if event.mimeData().hasImage:
             event.accept()
         else:
             event.ignore()
 
     def dragMoveEvent(self, event):
-        if event.mineData().hasImage:
+        if event.mimeData().hasImage:
             event.accept()
         else:
             event.ignore()
 
     def dropEvent(self, event):
-        if event.mineData().hasImage:
-            event.setDropAction(Qt.CopyAction)
+        if event.mimeData().hasImage:
+            event.setDropAction(Qt.DropAction)
             file_path = event.mineData().urls()[0].toLocalFile()
             self.set_image(file_path)
 
@@ -175,81 +169,11 @@ class MainWindow(QMainWindow):
         if e.key() == Qt.Key_F1:
             os.system('xdg-open "%s"' % self.openDirectoryDialog)
 
-# class DragDrop(QWidget):
-#     def __init__(self):
-#         super().__init__()
-#         self.resize(400, 400)
-#         self.setAcceptDrops(True)
-
-#         mainLayout = QGridLayout()
-
-#         self.photoViewer = ImageLabel()
-#         mainLayout.addWidget(self.photoViewer)
-
-#         self.setLayout(mainLayout)
-
-#         def dragEnterEvent(self, event):
-#             if event.mineData().hasImage:
-#                 event.accept()
-#             else:
-#                 event.ignore()
-
-#         def dragMoveEvent(self, event):
-#             if event.mineData().hasImage:
-#                 event.accept()
-#             else:
-#                 event.ignore()
-
-#         def dropEvent(self, event):
-#             if event.mineData().hasImage:
-#                 event.setDropAction(Qt.CopyAction)
-#                 file_path = event.mineData().urls()[0].toLocalFile()
-#                 self.set_image(file_path)
-
-#                 event.accept()
-#             else:
-#                 event.ignore()
-
-#         def set_image(self, file_path):
-#             self.photoViewer.setPixmap(QPixmap(file_path))
-
-
-# Barra de progresso funcs
-
-    # def openDirectory(self):
-    #     print("Hi i am openDirectory Function . I will open Directory selected ")
-    #     self.openDirectoryDialog = ddir = QFileDialog.getExistingDirectory(
-    #         self, "Get Dir Path")
-    #     print(self.openDirectoryDialog)
-
-    # def keyPressEvent(self, e):
-    #     if e.key() == Qt.Key_F1:
-    #         os.system('xdg-open "%s"' % self.openDirectoryDialog)
-
-    # class OpenDir(QMainWindow):
-    # def __init__(self):
-    #     super(OpenDir, self).__init__()
-    #     # self.openDirectory()
-    #     self.button = QPushButton('Open', self)
-    #     self.button.clicked.connect(self.openDirectory)
-    #     self.setCentralWidget(self.button)
-
-    # def openDirectory(self):
-    #     print("Hi i am openDirectory Function . I will open Directory selected ")
-    #     self.openDirectoryDialog = ddir = QFileDialog.getExistingDirectory(
-    #         self, "Get Dir Path")
-    #     print(self.openDirectoryDialog)
-
-    # def keyPressEvent(self, e):
-    #     if e.key() == Qt.Key_F1:
-    #         os.system('xdg-open "%s"' % self.openDirectoryDialog)
 
 def main():
-    app = QtWidgets.QApplication(sys.argv)
-
+    app = QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
-
     sys.exit(app.exec())
 
 
