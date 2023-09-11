@@ -1,12 +1,12 @@
 # QTDDragChangeFile.py
 
-## This project was made usining these modules :
-### PyPDF2
-### os
-### QTPy5
+### This project was made usining these modules :
+#### PyPDF2
+#### os
+#### QTPy5
 
 
-## The use of this is:
+### The use of this is:
 To update some PDf on our bunisses DB(NAS), some of our workers have a outdated sofware and when they save it it messes with the file. 
 This script come at my mind after some long months asking for them to change, so... I decided to be the change. 
 
