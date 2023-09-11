@@ -1,9 +1,9 @@
 import sys
 import os
 from PyQt5.QtWidgets import QLabel, QWidget, QApplication, QVBoxLayout, QPushButton
-from PyQt5.QtCore import  Qt
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
-import PyPDFScript
+import PyPDFScript as PyScript
 
 
 class ImageLabel(QLabel):
@@ -45,7 +45,8 @@ class AppDemo(QWidget):
         self.OpenFolderBtn.setStyleSheet("background-color : none;")
 
     def clickMethodFolder(self):
-        PyPDFScript.mainDef()
+        ClickAction = PyScript
+        ClickAction.mainDef()
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
@@ -66,7 +67,7 @@ class AppDemo(QWidget):
             self.resize(400, 400)
             print(file_path)
             lines = f'origFile = "{file_path}" '
-            with open('./Path_FilePy.txt', 'w') as f:
+            with open('./Path_FilePy.py', 'w') as f:
                 for line in lines:
                     f.write(line)
         else:
