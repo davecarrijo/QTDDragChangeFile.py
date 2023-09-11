@@ -17,5 +17,7 @@ Late this year will try to post the results in a global scoope of how things are
 ### Now the break-down of what I learn :
 --WIP--
 
+
+#  Some Imgs showing the result :
 ![1694408126162](image/README/1694408126162.png)
 ![1694408084997](image/README/1694408084997.png)
