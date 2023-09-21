@@ -14,6 +14,8 @@ It make us take 1 to 3 seconds to format the pdf instead of 2 minutes(Open the p
 
 Late this year will try to post the results in a global scoope of how things are better than before. 
 
+## The main file is the app.pyw
+
 ### Now the break-down of what I learn :
 --WIP--
 

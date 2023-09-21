@@ -3,7 +3,7 @@ import os
 from PyQt5.QtWidgets import QLabel, QWidget, QApplication, QVBoxLayout, QPushButton
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
-import PyPDFScript as PyScript
+
 
 
 class ImageLabel(QLabel):
@@ -37,16 +37,7 @@ class AppDemo(QWidget):
         self.OpenFolder()
 # Open Folder button
 
-    def OpenFolder(self):
-        self.OpenFolderBtn = QPushButton('Start', self)
-        self.OpenFolderBtn.clicked.connect(self.clickMethodFolder)
-        self.OpenFolderBtn.resize(100, 50)
-        self.OpenFolderBtn.move(150, 220)
-        self.OpenFolderBtn.setStyleSheet("background-color : none;")
 
-    def clickMethodFolder(self):
-        ClickAction = PyScript
-        ClickAction.mainDef()
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
@@ -70,8 +61,25 @@ class AppDemo(QWidget):
             with open('./Path_FilePy.py', 'w') as f:
                 for line in lines:
                     f.write(line)
+
         else:
             event.ignore()
+
+
+
+
+    def OpenFolder(self):
+        self.OpenFolderBtn = QPushButton('Start', self)
+        self.OpenFolderBtn.clicked.connect(self.clickMethodFolder)
+        self.OpenFolderBtn.resize(100, 50)
+        self.OpenFolderBtn.move(150, 220)
+        self.OpenFolderBtn.setStyleSheet("background-color : none;")
+
+    def clickMethodFolder(self):
+        import PyPDFScript as PyScript
+        ClickAction = PyScript
+        ClickAction.mainDef()
+
 
     def set_image(self, file_path):
         self.photoViewer.setPixmap(QPixmap(file_path))

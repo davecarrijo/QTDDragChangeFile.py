@@ -1,1 +1,1 @@
-origFile = "/Users/davidcarrijo/Documents/GitHub/QTDDragChangeFile.py/example.pdf" 
+origFile = "//nas-imacx2/Producao/2023/Communisis Portugal/1500_23 Topo Sleeve Ancora/Saidas/1500_23_Favo_TopoSleeve_Ancora_Laterais_54x230cm_1Kit CORTE.pdf" 
