@@ -2,19 +2,14 @@
 
 ### This project was made usining these modules :
 
-###### PyPDF2
-
-###### os
-
-###### QTPy5
-
-###### AHK( AUTO HOT KEY)
-
-###### pyautogui
-
-###### pynput
-
-###### time
+> PyPDF2
+> os
+> QTPy5
+>
+> > AHK( AUTO HOT KEY)
+> > pyautogui
+> > pynput
+> > time
 
 ## The use of this :
 
@@ -24,8 +19,8 @@ Late this year will try to post the results in a global scoope of how things are
 
 ##### The main file is the app.pyw, but as you see, you can just use the starter.ahk and use these shortcuts:
 
-CTRL+ALT+1 : For you to fix the PDF's
-CTRL+ALT+2 : For you to to the automatic action
+> CTRL+ALT+1 : For you to fix the PDF's
+> CTRL+ALT+2 : For you to to the automatic action
 
 ### Now the break-down of what I learn :
 
